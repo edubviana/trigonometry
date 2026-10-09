@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Círculo Trigonométrico: Seno, Cosseno e Tangente</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="layout">
+    <section class="stage" id="stage">
+      <canvas id="canvas" aria-label="Círculo trigonométrico interativo" role="img"></canvas>
+    </section>
+
+    <aside class="hud" aria-live="polite">
+      <div class="card">
+        <h2>Ângulo</h2>
+        <p class="big" id="angle-deg">0.0°</p>
+        <p class="row"><span>Radianos</span><b id="angle-rad">0.0000 rad</b></p>
+        <p class="row"><span>Fração de π</span><b id="angle-pi">0</b></p>
+        <label class="slider">
+          <span class="sr-only">Ângulo em graus</span>
+          <input type="range" id="slider" min="0" max="360" step="0.5" value="45" />
+        </label>
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <div class="card">
+        <h2>Quadrante</h2>
+        <p class="big" id="quadrant">1º quadrante</p>
+        <div class="signs">
+          <span class="pill cos">cos <b id="sign-cos">+</b></span>
+          <span class="pill sin">sen <b id="sign-sin">+</b></span>
+          <span class="pill tan">tan <b id="sign-tan">+</b></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Valores</h2>
+        <p class="row cos"><span>cos(θ)</span><b id="v-cos">1.0000</b></p>
+        <p class="row sin"><span>sen(θ)</span><b id="v-sin">0.0000</b></p>
+        <p class="row tan">
+          <span>tan(θ) = sen/cos</span><b id="v-tan">0.0000</b>
+        </p>
+        <p class="warn" id="tan-warn" hidden>
+          Indefinida em 90° e 270° (cos θ ≈ 0): a tangente tende a ±∞.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Identidade fundamental</h2>
+        <p class="identity" id="identity">sen² + cos² = 1.000</p>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
