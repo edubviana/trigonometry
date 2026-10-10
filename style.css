@@ -223,3 +223,23 @@ canvas.dragging { cursor: grabbing; }
   padding: 2px 6px;
   font: inherit;
 }
+
+/* Chips de ângulos notáveis */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--radius); }
+.chip.active {
+  background: var(--radius);
+  border-color: var(--radius);
+  color: #fff;
+}

@@ -1,11 +1,11 @@
 // Desenho do gráfico de sen(x), cos(x) e tan(x) no Canvas.
 import { COLORS } from "./renderer.js";
-import { formatPiFraction } from "./math.js";
+import { formatPiFraction, normalizeAngle, pointOnCircle } from "./math.js";
 
 const PI = Math.PI;
 const X_MIN = -2 * PI;
 const X_MAX = 2 * PI;
-const PAD = { left: 44, right: 20, top: 48, bottom: 36 };
+const PAD = { left: 12, right: 20, top: 48, bottom: 36 };
 const BREAK_EPS = 0.01;
 
 export class GraphRenderer {
@@ -28,9 +28,15 @@ export class GraphRenderer {
 
   // --- Conversões domínio <-> pixels ---------------------------------
 
+  /** Largura da coluna do mini círculo (à esquerda do gráfico). */
+  get sideW() {
+    const half = (this.height - PAD.top - PAD.bottom) / 2;
+    return Math.max(0, Math.min(this.width * 0.34, (2 * half) / 1.5 + 24));
+  }
+
   get plot() {
     return {
-      left: PAD.left,
+      left: PAD.left + this.sideW + 12,
       right: this.width - PAD.right,
       top: PAD.top,
       bottom: this.height - PAD.bottom,
@@ -66,6 +72,7 @@ export class GraphRenderer {
 
     this.#title(fn, w);
     this.#grid(fn);
+    const mini = this.#miniCircle(fn, x);
 
     ctx.save();
     ctx.beginPath();
@@ -95,7 +102,7 @@ export class GraphRenderer {
     ctx.shadowBlur = 0;
     ctx.restore();
 
-    this.#marker(fn, x);
+    this.#marker(fn, x, mini);
   }
 
   #title(fn, w) {
@@ -222,7 +229,119 @@ export class GraphRenderer {
     }
   }
 
-  #marker(fn, x) {
+  /**
+   * Mini círculo na coluna esquerda, na mesma escala vertical do gráfico
+   * (quando cabe), com θ = x mod 2π. Retorna o ponto do círculo de onde sai
+   * a guia projetora (ou null se não há valor visível).
+   */
+  #miniCircle(fn, x) {
+    const { ctx } = this;
+    const half = (this.plot.bottom - this.plot.top) / 2;
+    const R = Math.min(half / fn.yMax, (this.sideW - 24) / 2);
+    if (R < 12) return null;
+
+    const cx = PAD.left + this.sideW / 2;
+    const cy = this.yToPx(0, fn.yMax);
+    const theta = normalizeAngle(x);
+    const P = pointOnCircle(cx, cy, R, theta);
+    const c = Math.cos(theta);
+    const s = Math.sin(theta);
+    const t = Math.tan(theta);
+    const tanOk = fn.isTan && Math.abs(c) >= BREAK_EPS && Math.abs(t) <= fn.yMax;
+    let marker = null;
+
+    // Eixos e circunferência
+    ctx.strokeStyle = COLORS.axis;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - R - 8, cy);
+    ctx.lineTo(cx + R + 8, cy);
+    ctx.moveTo(cx, cy - R - 8);
+    ctx.lineTo(cx, cy + R + 8);
+    ctx.stroke();
+    ctx.strokeStyle = COLORS.muted;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.stroke();
+
+    if (fn.isTan) {
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.beginPath();
+      ctx.moveTo(cx + R, cy - R * fn.yMax);
+      ctx.lineTo(cx + R, cy + R * fn.yMax);
+      ctx.stroke();
+    }
+
+    // Projeção da função selecionada (e guia pontilhada do ponto P)
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = fn.color;
+    ctx.beginPath();
+    if (fn.id === "sen") {
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx, P.y);
+      marker = { x: P.x, y: P.y };
+    } else if (fn.id === "cos") {
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(P.x, cy);
+      marker = { x: cx, y: cy - c * R };
+    } else if (tanOk) {
+      ctx.moveTo(cx + R, cy);
+      ctx.lineTo(cx + R, cy - t * R);
+      marker = { x: cx + R, y: cy - t * R };
+    }
+    ctx.stroke();
+    ctx.lineCap = "butt";
+
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([3, 4]);
+    if (fn.id === "cos") {
+      // Compasso: transfere o cosseno do eixo X para o eixo Y
+      ctx.beginPath();
+      ctx.moveTo(P.x, P.y);
+      ctx.lineTo(P.x, cy);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.abs(c) * R, c >= 0 ? 0 : Math.PI, c >= 0 ? -Math.PI / 2 : Math.PI / 2, true);
+      ctx.stroke();
+    } else if (fn.id === "sen") {
+      ctx.beginPath();
+      ctx.moveTo(P.x, P.y);
+      ctx.lineTo(P.x, cy);
+      ctx.stroke();
+    } else if (tanOk) {
+      ctx.strokeStyle = "rgba(168, 85, 247, 0.6)";
+      ctx.beginPath();
+      ctx.moveTo(P.x, P.y);
+      ctx.lineTo(cx + R, cy - t * R);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Raio e ponto P
+    ctx.strokeStyle = COLORS.radius;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(P.x, P.y);
+    ctx.stroke();
+    ctx.fillStyle = COLORS.radius;
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(P.x, P.y, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = COLORS.muted;
+    ctx.font = "600 12px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(`θ = ${formatPiFraction(theta)}`, cx, this.plot.bottom + 8);
+    return marker;
+  }
+
+  #marker(fn, x, mini) {
     const { ctx } = this;
     const { top, bottom } = this.plot;
     const px = this.xToPx(x);
@@ -254,6 +373,21 @@ export class GraphRenderer {
     ctx.lineTo(x0, py);
     ctx.stroke();
     ctx.setLineDash([]);
+
+    // Guia projetora: do mini círculo até o ponto (x, f(x))
+    if (mini) {
+      ctx.strokeStyle = fn.color;
+      ctx.globalAlpha = 0.6;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([2, 5]);
+      ctx.beginPath();
+      ctx.moveTo(mini.x, mini.y);
+      ctx.lineTo(this.plot.left, mini.y);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+    }
 
     // Projeções nos eixos
     ctx.fillStyle = fn.color;

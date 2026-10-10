@@ -28,6 +28,9 @@ const state = {
   dragging: false,
 };
 
+const PRESET_ANGLES = [30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+const chips = new Map();
+
 let fromSlider = false;
 let frame = 0;
 
@@ -59,6 +62,10 @@ function updateHud() {
   $("g-y").style.color = fn.color;
 
   if (!fromSlider) slider.value = deg.toFixed(1);
+
+  for (const [angle, chip] of chips) {
+    chip.classList.toggle("active", Math.abs(deg - angle) < 0.05);
+  }
 }
 
 // --- Render / animação ----------------------------------------------------
@@ -113,6 +120,19 @@ slider.addEventListener("input", () => {
   fromSlider = true;
   setX(toRadians(parseFloat(slider.value)));
 });
+
+for (const angle of PRESET_ANGLES) {
+  const chip = document.createElement("button");
+  chip.type = "button";
+  chip.className = "chip";
+  chip.textContent = `${angle}°`;
+  chip.addEventListener("click", () => {
+    setPlaying(false);
+    setX(toRadians(angle));
+  });
+  chips.set(angle, chip);
+  $("g-presets").append(chip);
+}
 
 playBtn.addEventListener("click", () => setPlaying(!state.playing));
 $("g-speed").addEventListener("change", (e) => {

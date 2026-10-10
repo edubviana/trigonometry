@@ -79,6 +79,7 @@ export function formatNumber(value, digits = 4) {
 /** Funções do modo gráfico (propriedades usadas pelo HUD). */
 export const FUNCTIONS = {
   sen: {
+    id: "sen",
     label: "sen(x)",
     color: "#f87171",
     f: Math.sin,
@@ -90,6 +91,7 @@ export const FUNCTIONS = {
     parityEq: "sen(−x) = −sen(x)",
   },
   cos: {
+    id: "cos",
     label: "cos(x)",
     color: "#38bdf8",
     f: Math.cos,
@@ -101,6 +103,7 @@ export const FUNCTIONS = {
     parityEq: "cos(−x) = cos(x)",
   },
   tan: {
+    id: "tan",
     label: "tan(x)",
     color: "#fbbf24",
     f: Math.tan,
