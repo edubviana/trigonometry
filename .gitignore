@@ -1,4 +1,4 @@
-main.md
-specs.md
-specs-funcoes.md
-specs-minicirculo.md
+.gitignore
+
+CLAUDE.md
+docs/*

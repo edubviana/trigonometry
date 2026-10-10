@@ -10,6 +10,7 @@
   <nav class="tabs" role="tablist">
     <button class="tab active" role="tab" aria-selected="true" data-view="view-circle">Círculo Trigonométrico</button>
     <button class="tab" role="tab" aria-selected="false" data-view="view-graph">Gráficos das Funções</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="view-triangle">Triângulo Retângulo</button>
   </nav>
 
   <main class="layout" id="view-circle">
@@ -122,6 +123,66 @@
         <p class="row"><span>Imagem</span><b id="g-range">[−1, 1]</b></p>
         <p class="row"><span>Paridade</span><b id="g-parity">ímpar</b></p>
         <p class="identity" id="g-parity-eq"></p>
+      </div>
+    </aside>
+  </main>
+
+  <main class="layout" id="view-triangle" hidden>
+    <section class="stage" id="t-stage">
+      <canvas id="t-canvas" aria-label="Triângulo retângulo interativo" role="img"></canvas>
+    </section>
+
+    <aside class="hud" aria-live="polite">
+      <div class="card">
+        <h2>Ângulo θ</h2>
+        <p class="big" id="t-deg">45.0°</p>
+        <p class="row"><span>Radianos</span><b id="t-rad">0.7854 rad</b></p>
+        <p class="row"><span>Fração de π</span><b id="t-pi">π/4</b></p>
+        <label class="slider">
+          <span class="sr-only">Ângulo θ em graus</span>
+          <input type="range" id="t-slider" min="0" max="90" step="0.5" value="45" />
+        </label>
+        <div class="chips" id="t-presets"></div>
+      </div>
+
+      <div class="card">
+        <h2>Medidas lineares</h2>
+        <p class="row hyp"><span>Hipotenusa (H)</span><b id="t-h">0</b></p>
+        <input class="measure hyp" type="range" id="t-h-slider" min="0" max="10" step="0.01" value="0" aria-label="Hipotenusa" />
+        <div class="chips side-chips" id="t-h-chips"></div>
+        <p class="row adj"><span>Cateto adjacente (Cₐ = H·cos θ)</span><b id="t-ca">0</b></p>
+        <input class="measure adj" type="range" id="t-ca-slider" min="0" max="10" step="0.01" value="0" aria-label="Cateto adjacente" />
+        <div class="chips side-chips" id="t-ca-chips"></div>
+        <p class="row opp"><span>Cateto oposto (Cₒ = H·sen θ)</span><b id="t-co">0</b></p>
+        <input class="measure opp" type="range" id="t-co-slider" min="0" max="10" step="0.01" value="0" aria-label="Cateto oposto" />
+        <div class="chips side-chips" id="t-co-chips"></div>
+      </div>
+
+      <div class="card">
+        <h2>Relações trigonométricas</h2>
+        <div class="relation opp">
+          <span class="rel-name">sen θ</span><span class="eq">=</span>
+          <span class="frac"><span>Cₒ</span><span>H</span></span><span class="eq">=</span>
+          <span class="frac"><span id="t-sin-n">0</span><span id="t-sin-d">0</span></span><span class="eq">=</span>
+          <b id="t-sin">0</b>
+        </div>
+        <div class="relation adj">
+          <span class="rel-name">cos θ</span><span class="eq">=</span>
+          <span class="frac"><span>Cₐ</span><span>H</span></span><span class="eq">=</span>
+          <span class="frac"><span id="t-cos-n">0</span><span id="t-cos-d">0</span></span><span class="eq">=</span>
+          <b id="t-cos">0</b>
+        </div>
+        <div class="relation tan">
+          <span class="rel-name">tan θ</span><span class="eq">=</span>
+          <span class="frac"><span>Cₒ</span><span>Cₐ</span></span><span class="eq">=</span>
+          <span class="frac"><span id="t-tan-n">0</span><span id="t-tan-d">0</span></span><span class="eq">=</span>
+          <b id="t-tan">0</b>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Identidade fundamental</h2>
+        <p class="identity" id="t-identity">sen² + cos² = 1.000</p>
       </div>
     </aside>
   </main>

@@ -243,3 +243,44 @@ canvas.dragging { cursor: grabbing; }
   border-color: var(--radius);
   color: #fff;
 }
+
+/* Triângulo retângulo */
+:root {
+  --hyp: #8b5cf6;
+  --adj: #0284c7;
+  --opp: #ef4444;
+}
+.row.hyp b { color: var(--hyp); }
+.row.adj b { color: var(--adj); }
+.row.opp b { color: var(--opp); }
+.measure { width: 100%; margin: 2px 0 8px; }
+.measure.hyp { accent-color: var(--hyp); }
+.measure.adj { accent-color: var(--adj); }
+.measure.opp { accent-color: var(--opp); }
+.side-chips { margin-bottom: 10px; gap: 4px; }
+.side-chips .chip { padding: 1px 8px; }
+.chips { margin-top: 8px; }
+
+/* Relações em forma de fração */
+.relation {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+.relation .rel-name { color: var(--muted); font-style: italic; }
+.relation .eq { color: var(--muted); }
+.relation.opp b { color: var(--opp); }
+.relation.adj b { color: var(--adj); }
+.relation.tan b { color: var(--tan); }
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.25;
+  text-align: center;
+}
+.frac > span { padding: 0 6px; min-width: 2.2em; }
+.frac > span:first-child { border-bottom: 1.5px solid currentColor; }

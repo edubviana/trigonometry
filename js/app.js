@@ -13,6 +13,7 @@ import {
 import { Renderer } from "./renderer.js";
 import "./tabs.js";
 import "./graph.js";
+import "./triangle.js";
 
 const $ = (id) => document.getElementById(id);
 

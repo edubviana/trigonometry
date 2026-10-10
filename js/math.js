@@ -76,6 +76,34 @@ export function formatNumber(value, digits = 4) {
   return Number(s) === 0 ? (0).toFixed(digits) : s.replace("-", "−");
 }
 
+// --- Triângulo retângulo ---------------------------------------------------
+
+export const TRIANGLE_MIN_DEG = 0;
+export const TRIANGLE_MAX_DEG = 90;
+
+/** Limita θ (rad) ao intervalo [0°, 90°] para manter o triângulo visível. */
+export function clampTriangleAngle(theta) {
+  return Math.min(
+    toRadians(TRIANGLE_MAX_DEG),
+    Math.max(toRadians(TRIANGLE_MIN_DEG), theta),
+  );
+}
+
+/** Catetos e razões a partir da hipotenusa H e do ângulo θ em A. */
+export function triangleSides(H, theta) {
+  const adjacent = H * Math.cos(theta);
+  const opposite = H * Math.sin(theta);
+  return {
+    hypotenuse: H,
+    adjacent,
+    opposite,
+    // Razões dependem só de θ (continuam válidas com H = 0)
+    sin: Math.sin(theta),
+    cos: Math.cos(theta),
+    tan: Math.abs(Math.cos(theta)) < ASYMPTOTE_EPS ? NaN : Math.tan(theta),
+  };
+}
+
 /** Funções do modo gráfico (propriedades usadas pelo HUD). */
 export const FUNCTIONS = {
   sen: {
