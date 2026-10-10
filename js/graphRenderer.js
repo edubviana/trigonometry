@@ -31,7 +31,9 @@ export class GraphRenderer {
   /** Largura da coluna do mini círculo (à esquerda do gráfico). */
   get sideW() {
     const half = (this.height - PAD.top - PAD.bottom) / 2;
-    return Math.max(0, Math.min(this.width * 0.34, (2 * half) / 1.5 + 24));
+    // Cap folgado: o círculo precisa caber na escala vertical (R = half / yMax)
+    // para que a projeção coincida exatamente com a curva.
+    return Math.max(0, Math.min(this.width * 0.5, (2 * half) / 1.5 + 24));
   }
 
   get plot() {
@@ -247,7 +249,10 @@ export class GraphRenderer {
     const c = Math.cos(theta);
     const s = Math.sin(theta);
     const t = Math.tan(theta);
-    const tanOk = fn.isTan && Math.abs(c) >= BREAK_EPS && Math.abs(t) <= fn.yMax;
+    // Tangente fora da altura visível: o segmento é cortado em ±yMax em vez de sumir
+    const tanOk = fn.isTan && Math.abs(c) >= BREAK_EPS;
+    const tc = Math.max(-fn.yMax, Math.min(fn.yMax, t));
+    const tx = Math.abs(t) > fn.yMax ? cx + (R * tc) / t : cx + R;
     let marker = null;
 
     // Eixos e circunferência
@@ -287,8 +292,8 @@ export class GraphRenderer {
       marker = { x: cx, y: cy - c * R };
     } else if (tanOk) {
       ctx.moveTo(cx + R, cy);
-      ctx.lineTo(cx + R, cy - t * R);
-      marker = { x: cx + R, y: cy - t * R };
+      ctx.lineTo(cx + R, cy - tc * R);
+      marker = { x: cx + R, y: cy - tc * R };
     }
     ctx.stroke();
     ctx.lineCap = "butt";
@@ -313,7 +318,7 @@ export class GraphRenderer {
       ctx.strokeStyle = "rgba(168, 85, 247, 0.6)";
       ctx.beginPath();
       ctx.moveTo(P.x, P.y);
-      ctx.lineTo(cx + R, cy - t * R);
+      ctx.lineTo(tx, cy - tc * R);
       ctx.stroke();
     }
     ctx.setLineDash([]);

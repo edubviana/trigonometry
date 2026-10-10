@@ -81,7 +81,12 @@
 
       <div class="card">
         <h2>Ângulos notáveis</h2>
-        <div class="chips" id="g-presets"></div>
+        <table class="presets">
+          <tr id="presets-g1"><td>Quadrante I: </td></tr>
+          <tr id="presets-g2"><td>Quadrante II: </td></tr>
+          <tr id="presets-g3"><td>Quadrante III: </td></tr>
+          <tr id="presets-g4"><td>Quadrante IV: </td></tr>
+        </table>
       </div>
 
       <div class="card">
@@ -91,6 +96,7 @@
           <input type="range" id="g-slider" min="-360" max="360" step="0.5" value="45" />
         </label>
         <div class="controls">
+          <div class="presets-g" id="presets-g"></div>
           <button type="button" class="btn" id="g-play">Animar</button>
           <label class="speed">Velocidade
             <select id="g-speed">

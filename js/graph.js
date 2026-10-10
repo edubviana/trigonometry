@@ -28,7 +28,7 @@ const state = {
   dragging: false,
 };
 
-const PRESET_ANGLES = [30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+const PRESET_ANGLES = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
 const chips = new Map();
 
 let fromSlider = false;
@@ -122,6 +122,7 @@ slider.addEventListener("input", () => {
 });
 
 for (const angle of PRESET_ANGLES) {
+  const td = document.createElement("td");
   const chip = document.createElement("button");
   chip.type = "button";
   chip.className = "chip";
@@ -131,7 +132,22 @@ for (const angle of PRESET_ANGLES) {
     setX(toRadians(angle));
   });
   chips.set(angle, chip);
-  $("g-presets").append(chip);
+  td.appendChild(chip);
+  if(angle === 0) {
+    $("presets-g").append(chip);
+  }
+  else if(angle <= 90) {
+    $("presets-g1").appendChild(td);
+  }
+  else if(angle <= 180) {
+    $("presets-g2").appendChild(td);
+  }
+  else if(angle <= 270) {
+    $("presets-g3").appendChild(td);
+  }
+  else {
+    $("presets-g4").appendChild(td);
+  }
 }
 
 playBtn.addEventListener("click", () => setPlaying(!state.playing));
