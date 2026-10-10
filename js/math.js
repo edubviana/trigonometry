@@ -62,10 +62,11 @@ export function formatPiFraction(theta) {
   const prefix = best.err > 1e-6 ? "≈ " : "";
   if (best.n === 0) return "0";
   const g = gcd(Math.abs(best.n), best.d);
-  const n = best.n / g;
+  const n = Math.abs(best.n) / g;
   const d = best.d / g;
+  const sign = best.n < 0 ? "−" : "";
   const num = n === 1 ? "π" : `${n}π`;
-  return prefix + (d === 1 ? num : `${num}/${d}`);
+  return prefix + sign + (d === 1 ? num : `${num}/${d}`);
 }
 
 /** Formata número com 4 casas, sem "-0.0000". */
@@ -74,3 +75,40 @@ export function formatNumber(value, digits = 4) {
   const s = value.toFixed(digits);
   return Number(s) === 0 ? (0).toFixed(digits) : s.replace("-", "−");
 }
+
+/** Funções do modo gráfico (propriedades usadas pelo HUD). */
+export const FUNCTIONS = {
+  sen: {
+    label: "sen(x)",
+    color: "#f87171",
+    f: Math.sin,
+    isTan: false,
+    yMax: 1.5,
+    period: "2π",
+    range: "[−1, 1]",
+    parity: "ímpar",
+    parityEq: "sen(−x) = −sen(x)",
+  },
+  cos: {
+    label: "cos(x)",
+    color: "#38bdf8",
+    f: Math.cos,
+    isTan: false,
+    yMax: 1.5,
+    period: "2π",
+    range: "[−1, 1]",
+    parity: "par",
+    parityEq: "cos(−x) = cos(x)",
+  },
+  tan: {
+    label: "tan(x)",
+    color: "#fbbf24",
+    f: Math.tan,
+    isTan: true,
+    yMax: 3,
+    period: "π",
+    range: "]−∞, +∞[",
+    parity: "ímpar",
+    parityEq: "tan(−x) = −tan(x)",
+  },
+};

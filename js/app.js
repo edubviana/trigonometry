@@ -11,6 +11,8 @@ import {
   trig,
 } from "./math.js";
 import { Renderer } from "./renderer.js";
+import "./tabs.js";
+import "./graph.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -20,9 +22,10 @@ const renderer = new Renderer(canvas);
 
 const state = { theta: toRadians(45), dragging: false };
 
-const PRESETS = [0, 30, 45, 60, 90, 120, 180, 270, 360];
-
-// --- HUD --------------------------------------------------------------
+const PRESETS1 = [30, 45, 60, 90];
+const PRESETS2 = [120, 135, 150, 180];
+const PRESETS3 = [210, 225, 240, 270];
+const PRESETS4 = [300, 315, 330, 360];
 
 let fromSlider = false;
 
@@ -105,12 +108,41 @@ slider.addEventListener("input", () => {
   setTheta(Math.min(TWO_PI, toRadians(parseFloat(slider.value))));
 });
 
-for (const deg of PRESETS) {
+for (const deg of PRESETS1) {
+  const td = document.createElement("td");
   const btn = document.createElement("button");
   btn.type = "button";
   btn.textContent = `${deg}°`;
   btn.addEventListener("click", () => setTheta(toRadians(deg)));
-  $("presets").append(btn);
+  td.appendChild(btn);
+  $("presets1").append(td);
+}
+for (const deg of PRESETS2) {
+  const td = document.createElement("td");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.textContent = `${deg}°`;
+  btn.addEventListener("click", () => setTheta(toRadians(deg)));
+  td.appendChild(btn);
+  $("presets2").append(td);
+}
+for (const deg of PRESETS3) {
+  const td = document.createElement("td");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.textContent = `${deg}°`;
+  btn.addEventListener("click", () => setTheta(toRadians(deg)));
+  td.appendChild(btn);
+  $("presets3").append(td);
+}
+for (const deg of PRESETS4) {
+  const td = document.createElement("td");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.textContent = `${deg}°`;
+  btn.addEventListener("click", () => setTheta(toRadians(deg)));
+  td.appendChild(btn);
+  $("presets4").append(td);
 }
 
 new ResizeObserver(() => {

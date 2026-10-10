@@ -7,7 +7,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="layout">
+  <nav class="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true" data-view="view-circle">Círculo Trigonométrico</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="view-graph">Gráficos das Funções</button>
+  </nav>
+
+  <main class="layout" id="view-circle">
     <section class="stage" id="stage">
       <canvas id="canvas" aria-label="Círculo trigonométrico interativo" role="img"></canvas>
     </section>
@@ -22,7 +27,12 @@
           <span class="sr-only">Ângulo em graus</span>
           <input type="range" id="slider" min="0" max="360" step="0.5" value="45" />
         </label>
-        <div class="presets" id="presets"></div>
+        <table class="presets">
+          <tr id="presets1"><td>Quadrante I: </td></tr>
+          <tr id="presets2"><td>Quadrante II: </td></tr>
+          <tr id="presets3"><td>Quadrante III: </td></tr>
+          <tr id="presets4"><td>Quadrante IV: </td></tr>
+        </table>
       </div>
 
       <div class="card">
@@ -50,6 +60,57 @@
       <div class="card">
         <h2>Identidade fundamental</h2>
         <p class="identity" id="identity">sen² + cos² = 1.000</p>
+      </div>
+    </aside>
+  </main>
+
+  <main class="layout" id="view-graph" hidden>
+    <section class="stage" id="g-stage">
+      <canvas id="g-canvas" aria-label="Gráfico da função trigonométrica" role="img"></canvas>
+    </section>
+
+    <aside class="hud" aria-live="polite">
+      <div class="card">
+        <h2>Função</h2>
+        <div class="fn-buttons" id="g-fns">
+          <button type="button" data-fn="sen" style="--c: #f87171">f(x) = sen(x)</button>
+          <button type="button" data-fn="cos" style="--c: #38bdf8">f(x) = cos(x)</button>
+          <button type="button" data-fn="tan" style="--c: #fbbf24">f(x) = tan(x)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Animação</h2>
+        <label class="slider">
+          <span class="sr-only">Ângulo x em graus</span>
+          <input type="range" id="g-slider" min="-360" max="360" step="0.5" value="45" />
+        </label>
+        <div class="controls">
+          <button type="button" class="btn" id="g-play">Animar</button>
+          <label class="speed">Velocidade
+            <select id="g-speed">
+              <option value="0.5">0,5×</option>
+              <option value="1" selected>1×</option>
+              <option value="2">2×</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Ponto atual</h2>
+        <p class="row"><span>x</span><b id="g-x">0 rad</b></p>
+        <p class="row"><span>x (graus)</span><b id="g-deg">0°</b></p>
+        <p class="row"><span>x (fração de π)</span><b id="g-pi">0</b></p>
+        <p class="row" id="g-y-row"><span id="g-y-label">f(x)</span><b id="g-y">0</b></p>
+      </div>
+
+      <div class="card">
+        <h2>Propriedades</h2>
+        <p class="row"><span>Período (T)</span><b id="g-period">2π</b></p>
+        <p class="row"><span>Imagem</span><b id="g-range">[−1, 1]</b></p>
+        <p class="row"><span>Paridade</span><b id="g-parity">ímpar</b></p>
+        <p class="identity" id="g-parity-eq"></p>
       </div>
     </aside>
   </main>

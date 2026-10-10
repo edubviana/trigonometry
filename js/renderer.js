@@ -229,12 +229,12 @@ export class Renderer {
     if (hasCos && Math.abs(P.x - x0) > 28) {
       ctx.fillStyle = COLORS.cos;
       ctx.textAlign = "center";
-      ctx.fillText("cos", (x0 + P.x) / 2, y0 + (P.y < y0 ? 14 : -14));
+      ctx.fillText("cos θ", (x0 + P.x) / 2, y0 + (P.y < y0 ? 14 : -14));
     }
     if (hasSin && Math.abs(P.y - y0) > 28) {
       ctx.fillStyle = COLORS.sin;
       ctx.textAlign = P.x >= x0 ? "right" : "left";
-      ctx.fillText("sen", x0 + (P.x >= x0 ? -8 : 8), (y0 + P.y) / 2);
+      ctx.fillText("sen θ", x0 + (P.x >= x0 ? -8 : 8), (y0 + P.y) / 2);
     }
   }
 
@@ -283,7 +283,7 @@ export class Renderer {
         ctx.font = "700 13px system-ui, sans-serif";
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        ctx.fillText("tan", xt + 12, (y0 + yT) / 2);
+        ctx.fillText("tan θ", xt + 12, (y0 + yT) / 2);
       }
     } else {
       // Fora da tela: seta indicando o infinito
